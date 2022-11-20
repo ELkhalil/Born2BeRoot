@@ -1,0 +1,148 @@
+#   what is lighttpd :
+    lighttpd is an open-source web server optimized for speed-critical environments while remaining standards-compliant, secure and flexible
+
+# what is a web server : 
+    to answer this question we first need to know what is a web page, it is a collection of raw materials ranging from texts to images to databases 
+    all setting somewhere in the internet 
+    a web server is a software that run on that same computer, when u ask for that page the webserver put all the raw materials together and give you 
+    a ready web page.
+
+#   example :
+    when we search for our localhost ip 
+        request -> web server -> render the page in your browser
+    the most commun ones are APACHE and NGINIX they are very simple and most people are using it
+
+#   wordpress:
+    is a countent Management system meaning it's an app that help us create and orgnaize websites without direct coding
+    dealing only with countent
+
+other reasons to use a web server is that wordpress is a web based app that need an envirenement to be based on so when wordpress make a request
+the web server need to fulffil it.
+
+#   80 port to hudle HTTP requests
+
+lightpd will answer our requests from 80 port from our localhost 
+it will use the recources stored in the linux folder (because of this we will install wordpress inside this recources)
+    there is a PHP communication between wordpress and lighttpd to see if thee php modules are installed and ready
+of course this php module inside our lighttpd need a database witch is MariaDB in our case (to send sql requests to update the content precisely)
+
+#   ps : MariaDB is also a server (databasee management system)
+    it is an organized collection of information, a lot of times it goes into tabes witch called databases to be studied 
+    like excel | unlike databases witch is optimized for an efficient data accesses...
+as it is very broad database management system we onlt interested in usinge wordpress database
+
+#   Let’s take a moment and see how the PHP code in WordPress works with HTML first
+    First, someone types in your web address in their browser, or they click on a link.
+    This sends a request to your web hosting server.
+    Your server then sends the HTML code over the Internet back to their browser.
+    Their browser takes that HTML code and translates it into a web page
+
+#   installing Lighttpd
+    sudo apt install lighttpd -y
+1- Start & Enable Lighttpd Service
+    sudo systemctl start lighttpd
+2-To check the status:
+    systemctl status lighttpd
+
+
+#   installing mariadb:
+    #first i checked the system for MariaDB if it is available or not :
+        systemctl status mariadb
+
+    #installation of it :
+            apt install mariadb-server
+
+    #start interactive script to remove insecure default settings and to make the process auto
+            sudo mysql_secure_installation
+        Enter current password for root (enter for none): #Just press Enter (do not confuse database root with system root)
+            Set root password? [Y/n] n
+            Remove anonymous users? [Y/n] Y
+            Disallow root login remotely? [Y/n] Y
+            Remove test database and access to it? [Y/n] Y
+            Reload privilege tables now? [Y/n] Y
+   
+    #Log in to the MariaDB console
+        sudo mariadb
+            MariaDB [(none)]> CREATE DATABASE aelkhali;
+    
+    # Create new database user and grant them full privileges on the newly-created database
+        MariaDB [(none)]> GRANT ALL ON aelkhali.* TO 'abdo'@'localhost' IDENTIFIED BY 'abdo4321' WITH GRANT OPTION;
+    
+    #Flush the privileges
+        MariaDB [(none)]> FLUSH PRIVILEGES;
+    
+    #Exit the MariaDB shell
+        MariaDB [(none)]> exit
+    
+    # Verify whether database user was successfully created by logging in to the MariaDB
+        mariadb -u <username-2> -p
+        Enter password: <password-2>
+    
+    # Confirm whether database user has access to the database via SHOW DATABASES;.
+        MariaDB [(none)]> SHOW DATABASES;
+    
+            +--------------------+
+            | Database           |
+            +--------------------+
+            | <abdo>.          |
+            | information_schema |
+            +--------------------+
+
+#   installing php & wordpress : 
+
+    #Install php-cgi & php-mysql
+        sudo apt install php-cgi php-mysql
+
+    #Download WordPress to /var/www/html
+        wget https://wordpress.org/latest.tar.gz (check if wget is installed if not install it)
+
+    #Once the download is completed, extract the downloaded file with the following command:
+        tar -xvzf latest.tar.gz
+
+    #Copy content of /var/www/html/wordpress to /var/www/html
+        sudo cp -r /var/www/html/wordpress/* /var/www/html
+
+    #Create WordPress configuration file from its sample
+        sudo cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+
+    #Configure WordPress to reference previously-created MariaDB database & user
+        sudo vi /var/www/html/wp-config.php
+
+    #Replace the below
+        line23 define( 'DB_NAME', 'database_name_here' );
+        line26 define( 'DB_USER', 'username_here' );
+        line29 define( 'DB_PASSWORD', 'password_here' );
+       
+        with:
+
+        line23 define( 'DB_NAME', '<aelkhali>' );
+        line26 define( 'DB_USER', '<abdo>' );
+        line29 define( 'DB_PASSWORD', '<abdo4321>' );
+
+#   configure lighttpd
+    Enable below modules
+        $>sudo lighty-enable-mod fastcgi
+        $>sudo lighty-enable-mod fastcgi-php
+        $>sudo service lighttpd force-reload
+
+#   in case u want to start from the beginnig 
+-   delete all php 
+    sudo apt-get purge 'php*'
+
+-   delete and purge lighttpd
+    apt-get remove lighttpd
+    apt-get purge lighttpd
+
+-   delete the database
+    sudo apt-get purge mariadb-server 
+    sudo dpkg -l | grep mariadb
+    sudo apt-get --purge remove "mysql*"
+    sudo mv /etc/mysql/ /tmp/mysql_configs/
+
+
+
+# other informations :
+
+    GNU Wget is a computer program that retrieves content from web servers. It is part of the GNU Project. Its name derives from "World Wide Web" and "get." It supports downloading via HTTP, HTTPS, and FTP. Wikipedia
+
+

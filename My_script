@@ -1,0 +1,81 @@
+
+uname -a = it will give me everything i need to know about my architecture 
+lscpu = it will give us informations about our CPU and i will search to find the CPU and awk on it
+
+#	phyaical CPUs:
+	to find physical CPU i need to cat a file inside my proc folder as it list every processor
+	cd /proc/ cat cpuinfo
+		and grep thee processor
+
+#	finding the current available RAM:
+	i need to find the available memory and it's utilization rate 
+		used / free will give us the current available ram and it's utilization
+
+#	finding the current available memory:
+	pay attention here we are looking for the disk memory
+	for that we use a command called : df -h (-h here mean human readable data)
+		for more informations : https://www.hostinger.com/tutorials/vps/how-to-check-and-manage-disk-space-via-terminal
+	the -l to list only local files as mentioned in the --help
+		df -hl
+		size in here : i devided it by 1024 to get the size in GB
+
+#	finding the CPU Utilization 
+	we use the command top
+	You can see Linux CPU utilization under CPU statistics
+	when we run this command the output is devided into two sections 
+	first section : contain the summury statistics of thee process
+	second section : contains the list of the runing processors
+	navigate and give the load
+
+#	Whether LVM is active or not:
+	i need the lsblk that list my partitions in details
+	after runing it i will grep for lvm and minimize the output to only 1 line
+	afteer that i am goig to use 
+
+#	finding the active connections:
+The Transmission Control Protocol, or TCP protocol for short, is a standard for exchanging data between different devices in a computer network
+	there is a command called netstat but i am going to use an alternative here witch give me the same output
+	ss -s (-s option for the summury)
+
+#	The number of users using the server.:
+	i used the who command that lists the users on my server and counted the lines
+
+# the IPv4 address of your server 
+	to find the ip address u only have to see the hostname -i
+
+#	to find the mac address :
+	i will use the ip addr command to find it and use the tail -5 and print only the MAC address
+
+#	• The number of commands executed with the sudo program:
+	on newer systems a command that hundle this is journalctl 
+
+####### My final script : 
+#!/bin/bash
+
+INFOS=$(uname -a)
+PCPU=$(lscpu | grep "CPU(s)" | head -n 1 | awk '{print $2}')
+VCPU=$(cat /proc/cpuinfo | grep processor | wc -l)
+MEMU=$(free -m | grep Mem | awk '{printf("%d/%dMB (%.2f%%)\n", $3, $4, $3/$4 * 100)}')
+DUS=$(df -lh /dev/sda1 | tail -1 | awk '{printf("%d/%.2fG (%d%%)\n", $3, $2/1024, $5)'})
+CPULO=$(top -b -n 1 | grep load | awk '{print $11}' | cut -c -4)
+LBOOT=$(who -b | awk '{print $3 " " $4}')
+LVMU=$(lsblk | grep lvm | head -1 | awk '{if ($6 == "lvm") print "yes";else print "no"}')
+TCP=$(ss -s | grep estab | awk '{print $4}' | cut -c -1)
+ULOG=$(who | wc -l)
+IP=$(hostname -I)
+MAC=$(ip addr | tail -5 | head -1 | awk '{print $2}')
+NCOM=$(journalctl _COMM=sudo | grep COMMAND | wc -l)
+
+wall -n "
+	#Architecture: $INFOS
+	#CPU physical : $PCPU
+	#vCPU : $VCPU
+	#Memory Usage: $MEMU
+	#Disk Usage: $DUS
+	#CPU load: $CPULO%
+	#Last boot: $LBOOT
+	#LVM use: $LVMU
+	#Connections TCP : $TCP ESTABLISHED
+	#User log: $ULOG
+	#Network: IP $IP ($MAC)
+	#Sudo : $NCOM cmd"

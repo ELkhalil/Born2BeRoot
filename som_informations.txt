@@ -1,0 +1,186 @@
+1 - first of all what is virtualisation : 
+---------------------------------------------
+    Virtualization is the creation of a virtual -- rather than actual -- version of something, such as an operating system (OS), a server, a storage device or network resources.
+    Virtualization uses software that simulates hardware functionality to create a virtual system. This practice allows IT organizations to operate multiple operating systems,
+    more than one virtual system and various applications on a single server. The benefits of virtualization include greater efficiencies and economies of scale.
+
+2-How virtualization works
+---------------------------------------------
+    Virtualization describes a technology in which an application, guest OS or data storage is abstracted away from the true underlying hardware or software.
+    A key use of virtualization technology is server virtualization, which uses a software layer -- called a hypervisor</a -- to emulate the underlying hardware.
+    This often includes the CPU's memory, input/output (I/O) and network traffic.
+
+3-How Virtualization made :
+---------------------------------------------
+    it is made based on a software callled the virtual machine monitor (VMM) or sum call it the virtualizer and the technical name of it is : HYPERVIZRO
+    * what is a hypervisor : 
+        hypervisor (also known as a virtual machine monitor, VMM, or virtualizer) is a type of computer software, firmware or hardware that creates and runs virtual machines.
+        A computer on which a hypervisor runs one or more virtual machines is called a host machine, and each virtual machine is called a guest machine.
+    The hypervisor presents the guest operating systems with a virtual operating platform and manages the execution of the guest operating systems.
+    Unlike an emulator, the guest executes most instructions on the native hardware. (REMEMBER IT IS USING THE HARDWARE DIRECTLY)
+
+4- what are the preveliged of this hypervisor :
+---------------------------------------------
+    Hypervisor - a program whose purpose is control and multiplexing of hardware for other kernels.
+    Typically runs at an even higeher privileged level than a kernel, which was invented for this purpose.
+    Allows sharing a single hardware between multiple operating systems or instances there.
+
+5- what are the types of hypervisor : 
+---------------------------------------------
+it is classified of two important types : 
+
+    * type-1 : native or bare-metal hypervisors
+        These hypervisors run directly on the host's hardware to control the hardware and to manage guest operating systems. For this reason,
+        they are sometimes called bare-metal hypervisors. The first hypervisors, which IBM developed in the 1960s, were native hypervisors.[5]
+        These included the test software SIMMON and the CP/CMS operating system, the predecessor of IBM z/VM.
+    * type-2 : or hosted hypervisors
+         These hypervisors run on a conventional operating system (OS) just as other computer programs do.
+         A virtual machine monitor runs as a process on the host.
+         Type-2 hypervisors abstract guest operating systems from the host operating system.
+
+***  what is a DEBIAN : 
+---------------------------------------------
+    it is the oldest operating system based on the linux kernel .it it the father of a lot of distrubitions it has so many that builted based on it.
+    The combination of Debian's philosophy and methodology and the GNU tools, the Linux kernel, and other important free software, form a unique software distribution called Debian GNU/Linux.
+    why exactly debian : The feature that most distinguishes Debian from other Linux distributions is its package management system
+                         These tools give the administrator of a Debian system complete control over the packages installed on that system,
+                         including the ability to install a single package or automatically update the entire operating system
+                         Individual packages can also be protected from being updated. You can even tell the package management system about software you have compiled yourself and what dependencies it fulfills.
+    1.4. What is the Debian Installer: 
+        Debian Installer, also known as “d-i”, is the software system to install a basic working Debian system.
+        A wide range of hardware such as embedded devices, laptops, desktops and server machines is supported and a large set of free software for many purposes is offered.
+        
+
+6- what is a CentOS : 
+---------------------------------------------
+    it is also a linux distrubition.
+
+==> why debian and not CentOS :
+---------------------------------------------
+the debia is favotable because it hase a lot of packages not like CentOS
+CentOS takes so long in their versions realeas and sometimes many software froze and u have to wait so long fot it to support it 
+it is very difficulte to do an update locally anlike debian witch is completely easy to do an update
+
+7- what is AppArmor :
+---------------------------------------------
+    it is a Mandatory Access Control framework. When enabled, AppArmor confines programs according to a set of rules that specify what files a given program can access.
+    This proactive approach helps protect the system against both known and unknown vulnerabilities.
+    * what is Access Control framework : 
+        Access control is a security technique that regulates who or what can view or use resources...
+
+8 - what is LVM :
+---------------------------------------------
+    (LVM) is a Logical Volume Manager for the Linux operating system.
+       Logical volume management provides a higher-level view of the disk storage on a computer system than the traditional view of disks and partitions.
+       This gives the system administrator much more flexibility in allocating storage to applications and users.
+       Storage volumes created under the control of the logical volume manager can be resized and moved around almost at will.
+
+9 - Encrypted LVM
+---------------------------------------------
+    When formatting a LVM volume, you can choose between encrypted LVM or not encrypted LVM. To protect the confidentiality of your valuable data,
+    for instance in the event of the loss or theft of your computer or storage, such as volume, solid state disk, or hard drive,
+    when formatting a LVM volume it is suggested to consider formatting it using the encrypted LVM option.
+    <!> If you choose the encrypted LVM option, it is suggested to consider creating backup passwords.
+    So that recovery is quick and easy :) Otherwise it the event that somehow your password is not working, you risk permanently losing all your valuable data.
+    It is surprisingly frequent that people lose all their data because somehow their password is no longer working, and they did not created backup passwords.
+    Encrypted LVM is very strong, so if somehow you locked yourself out, unless you have backup passwords it is likely that you would be permanently locked out :(
+
+10 - what is SELinux :
+---------------------------------------------
+    Security-Enhanced Linux is a Linux kernel security module that provides a mechanism for supporting access control security policies, including
+    mandatory access controls. SELinux is a set of kernel modifications and user-space tools that have been added to various Linux distributions
+
+10 - what is lsblk command :
+---------------------------------------------
+    Lsblk is used to display details about block devices and these block devices(Except ram disk) are basically those files that represent devices connected to the pc.
+    It queries /sys virtual file system and udev db to obtain information that it displays. And it basically displays output in a tree-like structure.
+    This command comes pre-installed with the util-Linux package. 
+
+    * installing "lsblk"
+        $sudo apt-get install util-linux
+
+11 - what is an operating system :
+---------------------------------------------
+    An operating system consists of various fundamental programs which are needed by your computer so that it can communicate and receive instructions from users;
+    read and write data to hard disks, tapes, and printers; control the use of memory; and run other software. The most important part of an operating system is the kernel.
+    In a GNU/Linux system, Linux is the kernel component. The rest of the system consists of other programs, many of which were written by or for the GNU Project.
+    Because the Linux kernel alone does not form a working operating system, we prefer to use the term “GNU/Linux” to refer to systems that many people casually refer to as “Linux”.
+
+what is aptitude and apt ?
+---------------------------------------------
+Aptitude and apt-get are two of the popular tools which handle package management. Both are capable of handling all kinds of activities on packages including installation,
+removal, search etc. But still there are differences between both the tools which make users prefer one over the other.
+What are those differences that make these two tools to be considered separately is the scope of this article.
+
+What is Apt ?
+---------------------------------------------
+Apt or Advanced Packaging Tool is a free and open source software which gracefully handles software installation and removal.
+Initially it was designed for Debian’s .deb packages but it has been made compatible with RPM Package Manager.
+Apt is whole command line with no GUI. Whenever invoked from command line along with specifying the name of package to be installed,
+it finds that package in configured list of sources specified in ‘/etc/apt/sources.list’ along with the list of dependencies for that package
+and sorts them and automatically installs them along with the current package thus letting user not to worry of installing dependencies.
+It is highly flexible allowing User to control various configurations easily, like: adding any new source to search for packages,
+apt-pinning i.e. marking any package unavailable during system up-gradation thus making its current version be its final version installed,
+“smart” upgrade i.e. upgrading most important packages and leaving the least important ones.
+
+What is Aptitude? :
+---------------------------------------------
+Aptitude is front-end to advanced packaging tool which adds a user interface to the functionality,
+thus allowing a user to interactively search for a package and install or remove it. Initially created for Debain,
+Aptitude extends its functionality to RPM based distributions as well.
+
+UFW :
+---------------------------------------------
+    Uncomplicated Firewall 
+    Uncomplicated Firewall is a program for managing a netfilter firewall designed to be easy to use. It uses a command-line interface consisting of a 
+    small number of simple commands, and uses iptables for configuration. UFW is available by default in all Ubuntu installations since 8.04 LTS.
+
+#################################################################################################################
+sudo :                                                                                                          #
+                                                                                                                #
+su = switch user                                                                                                #
+sudo =  super do                                                                                                #
+
+to ckeck the linux distribution => uname -r
+
+check if something is installed we see the dpkg -l | grep sudo
+
+host name : aelkhali42
+    root ps : 123456789
+
+to check the hostname : hostname
+    to change it : nabvigate to the etc folder and change it inside the host file
+
+1- install and configure sudo following strict rules
+navigate to the sudoers (etc/sudoers) file and change the rules there
+
+2- creating a group called user42: 
+    addgroup user42
+check the group by cating it using cat /etc/group | grep user42
+    now i add a user called aelkhali to the group by 
+        adduser aelkhali user42
+    after that i add the user to the sudo group
+        adduser aelkhali sudo
+    check if group is added to sudo using 
+        getent group sudo
+
+Defaults  badpass_message="Password is wrong, please try again"  #try to set a message of your own
+
+a useful command to list all the user inside ur linux : compgen -u
+to change the hostname : 
+    sudo hostnamectl set-hostname fortknox
+
+cron
+Setting Up a cron Job
+Configure cron as root via sudo crontab -u root -e.
+
+$ sudo crontab -u root -e
+To schedule a shell script to run every 10 minutes, replace below line
+
+23 # m h  dom mon dow   command
+with:
+
+23 */10 * * * * sh /path/to/script
+Check root's scheduled cron jobs via sudo crontab -u root -l.
+
+$ sudo crontab -u root -l

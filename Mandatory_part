@@ -1,0 +1,238 @@
+first of all suppose i have a computer a mac for example but i wanted to play a game that works only on windows and does not support mac !!!
+what am i suppose to do ??
+i have to go buy a new computer windows !! suppose i want to learn linux i need another one for that or format my own and keep losing my data >>>>
+WE NEED A SOLUTION WE REALLY DO !!! AND THAT'S WHAT VIRTUALISATUION SOLVED 
+with the help of virtualisation we can run all of them in one laptop !!! how is that possible 
+
+it is possible with the help of hypervisor : a software that borrow HARDWARES (CPU, GPU, RAM, ...) and make it possible for u to make as many laptop as u want
+inside ur main laptop... and the beautiful idea is every laptop inside this hypervisor think it is real !! it is not ur just a virtual i know lol but u dont
+VIRTUAL BOX is a type 2 hypervisor : why because he need an operating system for the installation to be made (he ask the operating system for hardware recources)... meaning he is installed on top of windows/macos/linux (called host OS )...
+unlike type 1 : installed directly on the base system and does not require any operating ststem (direct access to hardware devices) !! like VMware ... it is used on big companies (he control the show) 
+the behavior is the same after all they both give us the possibility to create virtual machines in our computer
+
+Virtual Box : using dynamic allocation meaning => suppose we gived it 10 Gb maximum capacity the issue is if only 4GB been used now the virtual box will be smart   and use only what he need.
+-----------------------------------------------------------------------------------------------------------
+
+#   why debian ? 
+-   debian is one of the parent distrubition 
+debian is the ground where many systems are built and one of the oldest till day huge packages
+    Stability 2. Efficiency 3. Flexibility 4. Easy maintenance 5. Community based
+-----------------------------------------------------------------------------------------------------------
+
+#   logical volume manager :
+    it is a way of partitioning a disk the value of it is : flexible 
+suppose we have a normal partition X filled and it has no more space 
+is it possible to add size to it ? yes but most of times it is not secure and not garanteed 100%
+BUT with LVM it is very easy to resize it as u wish and give us a whole disk management like data transfer between partitions
+-   Physical Volumes PV: (sda, sdb, sdc) those are the real storage in the device
+-   Volume Group: sda + sdb + sdc (we group the physical volume in one)
+-   Lovgical Volume: when we access the Volume Group and partition it 
+#   partitioning using LVM2
+    we need a package for that called lvm2
+    -   create pv
+    -   create vg
+    -   create LVM 
+so it is possible to manipulate it as u want just search for it
+------------------------------------------------------------------------------------------------------------
+
+to understand SSH and why we need it first we need to go back to time when there was no mobiles/xboxs...back then they discovered a way to
+make computers talk to each other (through internet and ip addresses) after that they developed a way to make a computer controle each other one it's called Telnet it becomes very popular but it has a problem (not secure) anyone online could listen to the communication SSH solved that
+-a logical way of visualizing it is by thinking of it as locked box where u put ur data and it will be locked and sent to the other one when he receive it he need the key to access the box
+so once the server is in the same network it will be eaisier to access it from outside just by it's IP address using : ssh user@ip if there is a 
+specified port than we will added it to the line using -p
+
+openssh-server :
+    is the standard way of connecting to a linux server used by system administrators to manipulate servers
+Port Forwarding :
+    is a solution of the question what if we are not at the same network 
+to install it we use : 
+    sudo apt-get install openssh-server 
+check if it is installed : 
+    ssh -V
+    service ssh status
+    to check it's configs we use : sudo systemctl status sshd
+to connect with the server we need it's ip address :
+    hostname -i
+CONNECTING using password authentication:
+    of course it is not super secure but it will do the job fine 
+    we need the HOST (Destination) it can be (IP address | a hostname | a domain name)
+    we can include the user at the server : ssh user@host
+    TO SECURE USING KEYS : 
+        first we run ssh-keygen fron the host computer and not the server 
+        when we generate the keys we use the ssh-copy-id (it is a way to make u not move the physical files)
+        example : ssh-copy-id - i .ssh/userKey.pub user@host_IP
+        we are pushing the key to the server this way
+        IF WE ESTABLISHED A CONNECTION WE NEED TO REMOVE THE OTHER ONE FROM THE SERVER
+            sudo vim /etc/ssh/sshd_config change the PASSWORD AUTHENTICATION TO no
+------------------------------------------------------------------------------------------------------------
+
+what is a port : 
+    it is not a physical connection, it is a logical connection used by programs to exchange informations
+    it specifically determines witch program or service on a computer or server thats going to be used.
+    there is a range from 0 to 65000
+    most common ports are : 80-343 => identifies web pages (HTTP,HTTPS)
+    21 - FTP => file transfer protocol
+    25 - EMAILs
+------------------------------------------------------------------------------------------------------------
+
+#   FireWall :
+it is installed by defaults but most of times it is desabled
+    is a system designed to prevent unauthorized accesses from enetring a private network like a fire wall in the building structure 
+    it isolate the fire and keep it far from the other rooms
+        so it creates a safety barrier between a private network and the public internet
+    it has an access control list that filters the 
+        ports
+        IP ADDRESSES
+        Domain names
+        protocols
+        programs...
+    in our case we will use it to prevent anything from accessing our files apart from PORT 4242
+    it comes in many types but we are going to use the Host-Based firewall (a software that is installed directly on the computer)
+        and protect that computer only
+    to check the status : sudo ufw status
+    to enable : sudo ufw enable (it will be  active on computer startup)
+        sudo apt install ufw
+        sudo ufw enable
+        sudo ufw allow 4242
+        sudo ufw status
+    to desable it :
+        sudo ufw disable
+#   Procedure to list and delete UFW firewall rules
+    Log in to server using the ssh
+        Display ufw firewall rules, run: sudo ufw status numbered
+        Remove a ufw firewall rule by rule number # 3: sudo ufw delete 3
+        Another option to erase a firewall rule is to run: sudo ufw delete allow 22/tcp
+------------------------------------------------------------------------------------------------------------
+#   cron :
+    why ? it is the tool that will help us schedule a message or something (basically it will remember a task for us)
+    and execute it at specific times.
+    setup :
+        first we check if it is available using : crontab -l
+            we start the editing process : crontab -e (it will prompt an editor to edit the tmp file)
+        @reboot @10m * * * * command on every reboot
+    Start cron service
+        sudo service cron 
+    stop cron service 
+        service crond stop
+------------------------------------------------------------------------------------------------------------
+
+#   Hostname changing : 
+    navigate to /etc/hostname change it there and also in the hosts file
+------------------------------------------------------------------------------------------------------------
+
+#           Working with Users & Groups :
+    
+    on linux there is two types of users that existe in the system (users | root users)
+        root users can be brokedown to two subcategory :
+            Root user 
+            user with sudo access
+    here we deal with 3 important files : 
+
+#        /etc/passwd | /etc/group  | /etc/shadow
+1-Working with users :
+    - adding (useradd)
+    - removing (userdel)
+    - modifying (usermod)
+    - passwd
+2-working with groups :
+    - adding (groupadd)
+    - modifying (groumod)
+    - removing (groudel)
+3-Admin related
+    - root user
+    - sudoers
+    - visudo
+    - account locking (passwd -l user => (block user login) | passwd -u user => (unblock the user))
+4- creating a group called user42: 
+        addgroup user42
+    check the group by cating it using cat /etc/group | grep user42
+        now i add a user called aelkhali to the group by 
+            adduser aelkhali user42
+        after that i add the user to the sudo group
+            adduser aelkhali sudo
+        check if group is added to sudo using 
+            getent group sudo
+------------------------------------------------------------------------------------------------------------
+
+#   implementing password policy :
+    Support for password complexity is provided through the pluggable authentication module (PAM)
+    to check if it is already available : apt-cache policy *pam-pwquality*
+    else install it via : sudo apt install libpam-pwquality
+        PAM_pwquality : is a module used to ensure that users have strong password. so users will not use 
+            simple passwords to prevent brue force attacks
+        to enable password strengh check :
+            vim etc/pam.d/passwd
+#   1-setting expire every 30 days | minimum number of days | warning message 7 days b
+        vim /etc/login.defs
+        # line 160: set 30 for Password Expiration
+            PASS_MAX_DAYS 30
+        # line 161: set 2 for Minimum number of days available
+            PASS_MIN_DAYS 2
+        # line 162: set 7 for number of days for warnings
+            PASS_WARN_AGE 7
+#   2-setting the minlen | maxrepeat...
+        vi /etc/pam.d/common-password
+        difok=N
+            This argument will change the default of 1 for the number of changes in the new password from the old password.
+            The special value of 0 disables all checks of similarity of the new password with the old password except the new password being exactly the same as the old one.
+        dcredit=N
+            (N >= 0) This is the maximum credit for having digits in the new password. If you have less than or N digits, each digit will count +1 towards meeting the current minlen value. The default for dcredit is 0 which means there is no bonus for digits in password.
+            (N < 0) This is the minimum number of digits that must be met for a new password.
+        ucredit=N
+            (N >= 0) This is the maximum credit for having upper case letters in the new password. If you have less than or N upper case letters, each upper case letter will count +1 towards meeting the current minlen value. The default for ucredit is 0 which means there is no bonus for upper case letters in password.
+            (N < 0) This is the minimum number of upper case letters that must be met for a new password.
+        lcredit=N
+            (N >= 0) This is the maximum credit for having lower case letters in the new password. If you have less than or N lower case letters, each lower case letter will count +1 towards meeting the current minlen value. The default for lcredit is 0 which means there is no bonus for lower case letters in password.
+            (N < 0) This is the minimum number of lower case letters that must be met for a new password.
+        maxrepeat=N
+            Reject passwords which contain more than N same consecutive characters. The default is 0 which means that this check is disabled.
+#   The following rule does not apply to the root password
+        Note that root is not asked for an old password so the checks that compare the old and new password are not performed. So, basically, the phrase
+            The following rule does not apply to the root password
+    means you can't make difok=7 work for root and not that you must create a separate rule for root.
+#   applying the knowledge :
+    let's change the passwd for root
+        sudo passwd root ("same as intra")
+        sudo passwd aelkhali ("same as intra")
+------------------------------------------------------------------------------------------------------------
+
+#   configure sudo following strict rules. :
+sudo's behavior can be modified by Default_Entry lines, as explained earlier. A list of all supported Defaults parameters, grouped by type, are listed below.
+
+    sudoers — default sudo security policy plugin
+
+    Difference between sudo group and sudoers file?
+    sudo group is not special by itself. It has sudo access because (if) there's a line like this in the sudoers file:
+            %sudo   ALL=(ALL:ALL) ALL
+    So it's the file that really matters anyway.
+    let's navigate to the sudoers file :
+        /etc/sudoers ==>> u should use visudo as asked 
+            sudo visudo
+        this link has the man of everything : https://www.sudo.ws/docs/man/1.8.13/sudoers.man/
+    1 - passwd_tries :
+        The number of tries a user gets to enter his/her password before sudo logs the failure and exits. The default is 3.
+    2 - badpass_message :
+        Message that is displayed if a user enters an incorrect password. The default is Sorry, try again. unless insults are enabled.
+    3 - logfile
+        Path to the sudo log file (not the syslog log file). Setting a path turns on logging to a file; negating this option turns it off. By default, sudo logs via syslog.
+    https://www.sudo.ws/docs/man/1.8.17/sudoers.man/
+
+------------------------------------------------------------------------------------------------------------
+
+WHY APT ??
+    -----------
+    everything u want to install is a package in linux                                                              #
+    to install something u need a package manager                                                                   #
+    it is a lot complicated to install it manually as u need first to download depackage ...end many more           #
+    that's why i really apperciate apt as it is easy and simple and done everyhting for us                          #
+    apt = advanced package tool 
+    sudo apt update
+    sudo apt install "name"
+
+                    dpkg                              apt                                        aptitude
+                -dump and need deb              -high level very automate                   -more high level than apt 
+                files to depackage              hude and powerfule for                      it is like apt on stroids
+                them (many errors)              install and upgrade..encrypted              it does more than apt
+                very low level
+------------------------------------------------------------------------------------------------------------
+        
